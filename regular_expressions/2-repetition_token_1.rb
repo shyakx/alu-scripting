@@ -1,2 +1,2 @@
 #!/usr/bin/env ruby
-#/h(b)?tn/
+puts ARGV[0].scan(/hb?tn/).join
