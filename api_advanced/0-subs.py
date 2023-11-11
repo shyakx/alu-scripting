@@ -1,53 +1,17 @@
 #!/usr/bin/python3
 """
-Queries the Reddit API and returns the number of subscribers for a given subreddit.
-
-Module Documentation:
-    This module provides a function for querying the Reddit API to get the number
-    of subscribers for a given subreddit. It uses the Requests module for HTTP requests.
-
-Usage:
-    Example usage:
-    subreddit_name = "python"
-    subscribers_count = number_of_subscribers(subreddit_name)
-    print(f"The number of subscribers in the '{subreddit_name}' subreddit is: {subscribers_count}")
+Contains the number_of_subscribers function
 """
 
 import requests
 
+
 def number_of_subscribers(subreddit):
-    """
-    Get the number of subscribers for a subreddit.
-
-    Args:
-        subreddit (str): The name of the subreddit.
-
-    Returns:
-        int: The number of subscribers for the given subreddit, or 0 if invalid.
-    """
-    # Reddit API endpoint for subreddit information
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
-
-    # Set a custom User-Agent to avoid Too Many Requests error
-    headers = {'User-Agent': 'my_bot/1.0'}
-
-    # Make the HTTP request to get subreddit information
-    response = requests.get(url, headers=headers)
-
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
-        # Parse the JSON response to get the number of subscribers
-        data = response.json()
-        subscribers = data['data']['subscribers']
-        return subscribers
-    elif response.status_code == 404:
-        # Subreddit not found, return 0
+    """returns the number of subscribers for a given subreddit"""
+    if subreddit is None or type(subreddit) is not str:
         return 0
-    else:
-        # Other error, return 0
-        return 0
-
-# Example usage:
-subreddit_name = "python"
-subscribers_count = number_of_subscribers(subreddit_name)
-print(f"The number of subscribers in the '{subreddit_name}' subreddit is: {subscribers_count}")
+    r = requests.get('http://www.reddit.com/r/{}/about.json'.format(subreddit),
+                     headers={'User-Agent': 'Python/requests:APIproject:\
+v1.0.0 (by /u/aaorrico23)'}).json()
+    subs = r.get("data", {}).get("subscribers", 0)
+    return subs
